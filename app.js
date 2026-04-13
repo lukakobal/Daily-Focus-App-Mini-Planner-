@@ -28,6 +28,11 @@ export default function App() {
     setTasks(updatedTasks);
   }
 
+  function deleteTask(id) {
+    const filteredTasks = tasks.filter((task) => task.id !== id);
+    setTasks(filteredTasks);
+  }
+
   return (
     <div className="App">
       <h1>Daily Focus</h1>
@@ -52,9 +57,18 @@ export default function App() {
             }}
           >
             {task.text}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteTask(task.id);
+              }}
+            >
+              ❌
+            </button>
           </li>
         ))}
       </ul>
     </div>
   );
 }
+
