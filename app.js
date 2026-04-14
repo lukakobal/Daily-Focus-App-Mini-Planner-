@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles.css";
 
 export default function App() {
   const [input, setInput] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   function addTask() {
     if (!input.trim()) return;
@@ -32,6 +35,18 @@ export default function App() {
     const filteredTasks = tasks.filter((task) => task.id !== id);
     setTasks(filteredTasks);
   }
+
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <div className="App">
@@ -71,4 +86,3 @@ export default function App() {
     </div>
   );
 }
-
